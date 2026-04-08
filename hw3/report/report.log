@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.25)  8 APR 2026 16:58
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.25)  8 APR 2026 17:42
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -699,35 +699,28 @@ LaTeX Font Warning: Font shape `TU/KaiTi(0)/b/n' undefined
 LaTeX Font Warning: Font shape `TU/KaiTi(0)/m/sl' undefined
 (Font)              using `TU/KaiTi(0)/m/n' instead on input line 48.
 
-[2] [3]
+[2]
 File: ../data/01.png Graphic file (type bmp)
 <../data/01.png>
 File: ../output/01.png Graphic file (type bmp)
 <../output/01.png>
- [4]
-File: ../data/02.png Graphic file (type bmp)
-<../data/02.png>
-File: ../output/02.png Graphic file (type bmp)
-<../output/02.png>
-File: ../data/03.png Graphic file (type bmp)
-<../data/03.png>
-File: ../output/03.png Graphic file (type bmp)
-<../output/03.png>
- [5]
+ [3]
 File: ../data/04.png Graphic file (type bmp)
 <../data/04.png>
 File: ../output/04.png Graphic file (type bmp)
 <../output/04.png>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 File: ../data/05.png Graphic file (type bmp)
 <../data/05.png>
 File: ../output/05.png Graphic file (type bmp)
 <../output/05.png>
- [6]
-Overfull \hbox (40.05424pt too wide) in paragraph at lines 158--159
-\TU/KaiTi(0)/m/n/12 或 \TU/lmr/m/n/12 4-\TU/KaiTi(0)/m/n/12 邻 域 的 连 通 性，|  就 会 将 其 归 为 同 一 实 例。|  虽 然 我 尝 试 通 过 增 大 \TU/lmtt/m/n/12 morph_open_ksize
- []
 
-[7] [8] (./report.aux)
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4] [5] [6] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2022/08/05>
@@ -737,15 +730,15 @@ L3 programming layer <2022/08/05>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: BF643C4CB28C759427FF1079158F950D;923.
+(rerunfilecheck)             Checksum: EA3F58722022978106A802F1144C4950;843.
  ) 
 Here is how much of TeX's memory you used:
- 19740 strings out of 474772
- 419091 string characters out of 5757263
- 1939842 words of memory out of 5000000
- 41616 multiletter control sequences out of 15000+600000
- 567571 words of font info for 100 fonts, out of 8000000 for 9000
+ 19766 strings out of 474772
+ 422392 string characters out of 5757263
+ 1940842 words of memory out of 5000000
+ 41647 multiletter control sequences out of 15000+600000
+ 567555 words of font info for 98 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  93i,7n,97p,361b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on report.pdf (8 pages).
+Output written on report.pdf (6 pages).
