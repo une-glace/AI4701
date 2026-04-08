@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}任务说明}{3}{section.1}%
+\contentsline {section}{\numberline {2}方法介绍}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}算法选择}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}核心处理流程}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}算法参数调整与优化}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}结果展示}{4}{section.3}%
+\contentsline {section}{\numberline {4}结果分析}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}客观评价}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}存在的问题与原因分析}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}总结}{8}{subsection.4.3}%
