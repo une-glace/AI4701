@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.25)  8 APR 2026 17:42
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.25)  9 APR 2026 19:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -700,27 +700,65 @@ LaTeX Font Warning: Font shape `TU/KaiTi(0)/m/sl' undefined
 (Font)              using `TU/KaiTi(0)/m/n' instead on input line 48.
 
 [2]
-File: ../data/01.png Graphic file (type bmp)
-<../data/01.png>
 File: ../output/01.png Graphic file (type bmp)
 <../output/01.png>
- [3]
-File: ../data/04.png Graphic file (type bmp)
-<../data/04.png>
 File: ../output/04.png Graphic file (type bmp)
 <../output/04.png>
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-File: ../data/05.png Graphic file (type bmp)
-<../data/05.png>
 File: ../output/05.png Graphic file (type bmp)
 <../output/05.png>
+ [3] [4]
+File: ../figs/sam_ori_01.png Graphic file (type bmp)
+<../figs/sam_ori_01.png>
+ [5] [6]
+File: ../figs/grounded_sam_ori_01.png Graphic file (type bmp)
+<../figs/grounded_sam_ori_01.png>
+File: ../figs/grounded_sam_ori_02.png Graphic file (type bmp)
+<../figs/grounded_sam_ori_02.png>
+File: ../figs/grounded_sam_ori_04.png Graphic file (type bmp)
+<../figs/grounded_sam_ori_04.png>
+ [7]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 175.
+ [8]
+File: ../figs/grounded_sam_0.2_0.2.png Graphic file (type bmp)
+<../figs/grounded_sam_0.2_0.2.png>
+File: ../figs/grounded_sam_0.15_0.2.png Graphic file (type bmp)
+<../figs/grounded_sam_0.15_0.2.png>
+File: ../figs/grounded_sam_0.17_0.27_0.2.png Graphic file (type bmp)
+<../figs/grounded_sam_0.17_0.27_0.2.png>
+File: ../figs/grounded_sam_0.15_0.25_0.3.png Graphic file (type bmp)
+<../figs/grounded_sam_0.15_0.25_0.3.png>
+ [9]
+Overfull \hbox (4.4473pt too wide) in paragraph at lines 243--244
+[]\TU/KaiTi(0)/m/n/12 在 经 过 漫 长 的 调 参 之 后，|  我 最 终 确 定 了 参 数 \TU/lmtt/m/n/12 box_threshold = 0.1\TU/lmr/m/n/12 , \TU/lmtt/m/n/12 text_threshold
+ []
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[4] [5] [6] (./report.aux)
+File: ../figs/调参.png Graphic file (type bmp)
+<../figs/调参.png>
+File: ../output_grounded_sam/0.1_0.15_0.3/01.png Graphic file (type bmp)
+<../output_grounded_sam/0.1_0.15_0.3/01.png>
+File: ../output_grounded_sam/0.1_0.15_0.3/02.png Graphic file (type bmp)
+<../output_grounded_sam/0.1_0.15_0.3/02.png>
+File: ../output_grounded_sam/0.1_0.15_0.3/03.png Graphic file (type bmp)
+<../output_grounded_sam/0.1_0.15_0.3/03.png>
+File: ../output_grounded_sam/0.1_0.15_0.3/04.png Graphic file (type bmp)
+<../output_grounded_sam/0.1_0.15_0.3/04.png>
+File: ../output_grounded_sam/0.1_0.15_0.3/05.png Graphic file (type bmp)
+<../output_grounded_sam/0.1_0.15_0.3/05.png>
+[10]
+File: ../figs/ai_ui.png Graphic file (type bmp)
+<../figs/ai_ui.png>
+File: ../figs/ai_01.png Graphic file (type bmp)
+<../figs/ai_01.png>
+File: ../figs/ai_02.png Graphic file (type bmp)
+<../figs/ai_02.png>
+File: ../figs/ai_03.png Graphic file (type bmp)
+<../figs/ai_03.png>
+File: ../figs/ai_04.png Graphic file (type bmp)
+<../figs/ai_04.png>
+File: ../figs/ai_05.png Graphic file (type bmp)
+<../figs/ai_05.png>
+ [11] [12] [13] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2022/08/05>
@@ -730,15 +768,15 @@ L3 programming layer <2022/08/05>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: EA3F58722022978106A802F1144C4950;843.
+(rerunfilecheck)             Checksum: E1319E658F246B4E4C1C3917F325596D;2330.
  ) 
 Here is how much of TeX's memory you used:
- 19766 strings out of 474772
- 422392 string characters out of 5757263
- 1940842 words of memory out of 5000000
- 41647 multiletter control sequences out of 15000+600000
- 567555 words of font info for 98 fonts, out of 8000000 for 9000
+ 20036 strings out of 474772
+ 434383 string characters out of 5757263
+ 1943842 words of memory out of 5000000
+ 41897 multiletter control sequences out of 15000+600000
+ 567563 words of font info for 99 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,7n,97p,361b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,7n,97p,372b,656s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on report.pdf (6 pages).
+Output written on report.pdf (13 pages).

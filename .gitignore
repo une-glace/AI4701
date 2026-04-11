@@ -1,0 +1,7 @@
+# Ignore large model weight files
+*.pth
+*.pt
+*.ckpt
+
+# Ignore large video experiment files
+bhw/vedio_exp/
