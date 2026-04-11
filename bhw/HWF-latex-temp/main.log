@@ -1696,4 +1696,366 @@ File: untxsym.fd 2023/08/16 Fontinst v1.933 font definitions for U/ntxsym.
 )
 LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 26.
  (e:/software/texlive/2024/texmf-dist/tex/latex/newtx/untxsyc.fd
-File: untxsyc.fd 2012/04/12 Fontinst v
+File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
+)
+
+Package fontspec Info: Could not resolve font "SimHei/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "SimHei/BI" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "SimHei/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Font family 'SimHei(0)' created for font 'SimHei' with
+(fontspec)             options [Script={CJK},AutoFakeBold={3}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"SimHei/OT:script=hani;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->"SimHei/OT:script=hani;language=dflt;embolden=3;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+
+Underfull \hbox (badness 10000) has occurred while \output is active
+[]
+ []
+
+[1
+
+
+] [2
+
+
+]
+Underfull \hbox (badness 10000) has occurred while \output is active
+[]
+ []
+
+[3] [4
+
+
+] (./contents/abstract.tex [1
+
+
+] [2
+
+]) [3
+
+] [4
+
+]
+No file main.toc.
+\tf@toc=\write6
+\openout6 = `main.toc'.
+
+[5
+
+] [6
+
+]
+No file main.lof.
+\tf@lof=\write7
+\openout7 = `main.lof'.
+
+[7
+
+] [8
+
+]
+No file main.lot.
+\tf@lot=\write8
+\openout8 = `main.lot'.
+
+[9
+
+] [10
+
+]
+No file main.loa.
+\tf@loa=\write9
+\openout9 = `main.loa'.
+
+(./contents/nomenclature.tex [11
+
+] [12
+
+] [13]) [14] (./contents/intro.tex
+第 1 章
+[1
+
+
+]
+
+Package fontspec Info: Could not resolve font "FangSong/BI" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: Could not resolve font "FangSong/B" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: Could not resolve font "FangSong/I" (it probably
+(fontspec)             doesn't exist).
+
+
+Package fontspec Info: Font family 'FangSong(0)' created for font 'FangSong'
+(fontspec)             with options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+
+ [2]
+
+Package fontspec Info: Could not resolve font "KaiTi/BI" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "KaiTi/B" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Could not resolve font "KaiTi/I" (it probably doesn't
+(fontspec)             exist).
+
+
+Package fontspec Info: Font family 'KaiTi(0)' created for font 'KaiTi' with
+(fontspec)             options [Script={CJK}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+
+) (./contents/math_and_citations.tex [3] [4
+
+]
+第 2 章
+LaTeX Font Info:    Font shape `TU/texgyreheros(0)/m/n' will be
+(Font)              scaled to size 11.32233pt on input line 9.
+[5]
+
+LaTeX Warning: Reference `thm:res' on page 6 undefined on input line 99.
+
+[6]
+
+LaTeX Warning: Citation 'Yu2001' on page 7 undefined on input line 123.
+
+
+LaTeX Warning: Citation 'Cheng1999' on page 7 undefined on input line 123.
+
+
+LaTeX Warning: Citation 'LSC1957' on page 7 undefined on input line 123.
+
+
+LaTeX Warning: Citation 'Li1999' on page 7 undefined on input line 125.
+
+
+LaTeX Warning: Citation 'Jiang1989' on page 7 undefined on input line 125.
+
+
+LaTeX Warning: Citation 'Hopkinson1999' on page 7 undefined on input line 125.
+
+
+LaTeX Warning: Citation 'Yu2001' on page 7 undefined on input line 126.
+
+
+LaTeX Warning: Citation 'Jiang1998' on page 7 undefined on input line 126.
+
+
+LaTeX Warning: Citation 'CSTAM1990' on page 7 undefined on input line 127.
+
+
+LaTeX Warning: Citation 'WHO1970' on page 7 undefined on input line 127.
+
+
+LaTeX Warning: Citation 'Zhang1998' on page 7 undefined on input line 127.
+
+
+LaTeX Warning: Citation 'Jiang1989' on page 7 undefined on input line 128.
+
+
+LaTeX Warning: Citation 'HBLZ2001' on page 7 undefined on input line 128.
+
+
+LaTeX Warning: Citation 'Cheng1999' on page 7 undefined on input line 128.
+
+
+LaTeX Warning: Citation 'GBT2659' on page 7 undefined on input line 128.
+
+
+LaTeX Warning: Citation 'Li1999' on page 7 undefined on input line 129.
+
+
+LaTeX Warning: Citation 'Li2000' on page 7 undefined on input line 129.
+
+
+LaTeX Warning: Citation 'Ding2000' on page 7 undefined on input line 129.
+
+
+LaTeX Warning: Citation 'Jiang1999' on page 7 undefined on input line 130.
+
+
+LaTeX Warning: Citation 'Christine1998' on page 7 undefined on input line 130.
+
+
+LaTeX Warning: Citation 'Xiao2001' on page 7 undefined on input line 130.
+
+
+Overfull \hbox (7.68059pt too wide) in paragraph at lines 122--131
+\TU/SimSun(0)/m/n/12.045 引 用 的 参 考 文 献” ，|  如$[]$。|  使 用 [][]\TU/texgyrecursor(0)/m/n/12.045 \parencite{key1,key2,key3...}
+ []
+
+
+LaTeX Warning: Citation 'Yang1999' undefined on input line 135.
+
+
+LaTeX Warning: Citation 'Schinstock2000' undefined on input line 135.
+
+
+LaTeX Warning: Citation 'Wen1990' undefined on input line 135.
+
+
+LaTeX Warning: Citation 'GBT16159' undefined on input line 135.
+
+) (./contents/floats.tex [7] [8
+
+]
+第 3 章
+
+LaTeX Warning: Reference `fig:energy-distrib' on page 9 undefined on input line 19.
+
+
+LaTeX Warning: Reference `fig:energy-distrib' on page 9 undefined on input line 19.
+
+PGFPlots: reading {./assets/energy-distrib.csv}
+
+LaTeX Warning: Reference `fig:SRR' on page 9 undefined on input line 55.
+
+File: example-image-a.pdf Graphic file (type pdf)
+<use example-image-a.pdf>
+File: example-image-b.pdf Graphic file (type pdf)
+<use example-image-b.pdf>
+[9]
+
+LaTeX Warning: Reference `fig:parallel1' on page 10 undefined on input line 68.
+
+
+LaTeX Warning: Reference `fig:parallel2' on page 10 undefined on input line 68.
+
+File: example-image-a.pdf Graphic file (type pdf)
+<use example-image-a.pdf>
+File: example-image-b.pdf Graphic file (type pdf)
+<use example-image-b.pdf>
+
+LaTeX Warning: Reference `fig:subfigure' on page 10 undefined on input line 94.
+
+File: example-image-a.pdf Graphic file (type pdf)
+<use example-image-a.pdf>
+File: example-image-b.pdf Graphic file (type pdf)
+<use example-image-b.pdf>
+
+LaTeX Warning: Reference `fig:bisubcaptionbox' on page 10 undefined on input line 114.
+
+File: example-image-a.pdf Graphic file (type pdf)
+<use example-image-a.pdf>
+File: example-image-b.pdf Graphic file (type pdf)
+<use example-image-b.pdf>
+[10]
+LaTeX Font Info:    Font shape `TU/texgyreheros(0)/m/n' will be
+(Font)              scaled to size 8.49173pt on input line 162.
+
+
+LaTeX Warning: Reference `tab:footnote' on page 11 undefined on input line 167.
+
+
+LaTeX Warning: Reference `tab:performance' on page 11 undefined on input line 193.
+
+[11] [12]
+
+LaTeX Warning: Reference `algo:algorithm' on page 13 undefined on input line 265.
+
+(e:/software/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/02/21 1.10 listings language file
+) (e:/software/texlive/2024/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2024/02/21 1.10 (Carsten Heinz)
+) [13]
+LaTeX Font Info:    Font shape `TU/texgyrecursor(0)/m/sl' in size <9.03374> not available
+(Font)              Font shape `TU/texgyrecursor(0)/m/it' tried instead on input line 306.
+) (./contents/summary.tex [14]
+第 4 章
+)
+
+LaTeX Warning: Empty bibliography on input line 65.
+
+(./contents/app_maxwell_equations.tex [15
+
+] [16
+
+]
+附录 A
+) (./contents/app_flow_chart.tex [17] [18
+
+]
+附录 B
+
+LaTeX Warning: Reference `fig:flow_chart' on page 19 undefined on input line 5.
+
+(./figures/flow_chart.tex)) [19] [20
+
+] (./contents/acknowledgements.tex) [21
+
+
+] (./main.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2022/08/05>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  4552CDCE289893C8B8BE00490DEF46C9;3373.
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                main
+(biblatex)                and rerun LaTeX afterwards.
+
+Package logreq Info: Writing requests to 'main.run.xml'.
+\openout1 = `main.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 61404 strings out of 474772
+ 1463165 string characters out of 5757263
+ 2381022 words of memory out of 5000000
+ 82593 multiletter control sequences out of 15000+600000
+ 651029 words of font info for 294 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 107i,17n,131p,1214b,3408s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on main.pdf (39 pages).

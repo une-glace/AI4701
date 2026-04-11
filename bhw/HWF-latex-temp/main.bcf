@@ -2929,4 +2929,54 @@
     </bcf:constraints>
   </bcf:datamodel>
   <!-- CITATION DATA -->
-  <!-- SE
+  <!-- SECTION 0 -->
+  <bcf:bibdata section="0">
+    <bcf:datasource type="file" datatype="bibtex" glob="false">refs.bib</bcf:datasource>
+  </bcf:bibdata>
+  <bcf:section number="0">
+    <bcf:citekey order="1" intorder="1">Yu2001</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">Cheng1999</bcf:citekey>
+    <bcf:citekey order="1" intorder="3">LSC1957</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">Li1999</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">Jiang1989</bcf:citekey>
+    <bcf:citekey order="2" intorder="3">Hopkinson1999</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">Yu2001</bcf:citekey>
+    <bcf:citekey order="3" intorder="2">Jiang1998</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">CSTAM1990</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">WHO1970</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">Zhang1998</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">Jiang1989</bcf:citekey>
+    <bcf:citekey order="7" intorder="2">HBLZ2001</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">Cheng1999</bcf:citekey>
+    <bcf:citekey order="8" intorder="2">GBT2659</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">Li1999</bcf:citekey>
+    <bcf:citekey order="9" intorder="2">Li2000</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">Ding2000</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">Jiang1999</bcf:citekey>
+    <bcf:citekey order="11" intorder="2">Christine1998</bcf:citekey>
+    <bcf:citekey order="11" intorder="3">Xiao2001</bcf:citekey>
+    <bcf:citekey order="12" intorder="1" nocite="1">Yang1999</bcf:citekey>
+    <bcf:citekey order="13" intorder="2" nocite="1">Schinstock2000</bcf:citekey>
+    <bcf:citekey order="14" intorder="3" nocite="1">Wen1990</bcf:citekey>
+    <bcf:citekey order="15" intorder="4" nocite="1">GBT16159</bcf:citekey>
+  </bcf:section>
+  <!-- SORTING TEMPLATES -->
+  <bcf:sortingtemplate name="none">
+    <bcf:sort order="1">
+      <bcf:sortitem order="1">citeorder</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="2">
+      <bcf:sortitem order="1">intciteorder</bcf:sortitem>
+    </bcf:sort>
+  </bcf:sortingtemplate>
+  <!-- DATALISTS -->
+  <bcf:datalist section="0"
+                name="none/global//global/global"
+                type="entry"
+                sortingtemplatename="none"
+                sortingnamekeytemplatename="global"
+                labelprefix=""
+                uniquenametemplatename="global"
+                labelalphanametemplatename="global">
+  </bcf:datalist>
+</bcf:controlfile>
