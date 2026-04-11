@@ -1,0 +1,343 @@
+\documentclass[12pt,a4paper]{ctexart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx} % Added [draft] to speed up compilation
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false
+}
+
+% 设置中文字体为楷体
+\setCJKmainfont{KaiTi} % 设置主字体为楷体
+\setCJKsansfont{KaiTi} % 设置无衬线字体为楷体
+\setCJKmonofont{KaiTi} % 设置等宽字体为楷体
+
+\title{HW3：螺丝实例分割}
+\author{李青雅 523030910004 电院2301}
+\date{\today}
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents % 生成目录
+\newpage
+
+\section{任务说明}
+本次作业的目标是针对俯视角的 5 张螺丝图像实现相关算法，完成单个图像上的螺丝精确实例分割。要求能够准确地将每一个螺丝独立分割出来，避免漏分、误分割或不完整分割，并将分割结果通过叠加半透明彩色掩码进行可视化展示。
+
+
+\section{方法一：传统图像处理尝试（基于阈值与形态学）}
+作为本次任务的初步尝试，我首先采用了传统图像处理方法实现螺丝实例分割。传统方法在处理背景单一、对比度强烈的工业视觉检测任务时具有较高的执行效率和可解释性。
+
+\subsection{核心处理流程}
+算法的整体处理流程主要包含以下四个步骤：
+\begin{enumerate}
+    \item \textbf{图像预处理与降噪}：将彩色图像转换为灰度图，并应用 $5\times 5$ 的高斯滤波平滑图像，消除高频噪点。
+    \item \textbf{自适应二值化}：由于各张测试图的背景光照与整体亮度有所不同，采用 Otsu 大津法计算自适应阈值，配合 \texttt{THRESH\_BINARY\_INV} 操作，将偏暗的螺丝和螺母作为前景提取出来。
+    \item \textbf{形态学开运算}：使用 $3\times 3$ 的全1卷积核对二值图进行一次形态学开运算，切断极细小的毛刺并去除孤立的背景噪点。
+    \item \textbf{实例提取与先验几何特征过滤}：
+    \begin{itemize}
+        \item \textbf{轮廓填充}：查找并填充所有前景连通域的内部空洞，获取每个物体的整体实心轮廓图。
+        \item \textbf{面积过滤}：基于 \texttt{connectedComponentsWithStats} 获取每个连通域。首先剔除面积过小（$Area < 2000$）的微小斑点噪点。
+        \item \textbf{实心率过滤以剔除螺母}：因为测试集中混有大量内部具有大孔洞的螺母，算法计算每个连通域的“原始像素面积”与“填充后面积”的比值。螺母因为中空结构，实心率往往低于 0.75；而螺丝作为实心物体，实心率极高（接近 1）。因此设定阈值 $Ratio > 0.75$，剔除所有螺母，保留螺丝。
+    \end{itemize}
+    \item \textbf{掩码叠加与可视化着色}：对最终保留的每一个螺丝连通域进行重新编号，并为其随机分配不同的 RGB 颜色。使用 $Alpha=0.5$ 的权重将掩码叠加至原图，并在实例的外部轮廓上绘制红色边界线以增强显示效果。
+\end{enumerate}
+
+\subsection{结果展示}
+以下展示了算法在 3 张测试示例图像上的实例分割可视化结果。左侧为原图，右侧为叠加了彩色半透明掩码及红色边缘线的分割结果图。
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output/01.png}
+        \caption{01.png 分割结果\\(共14个螺丝)}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output/04.png}
+        \caption{04.png 分割结果\\(共10个螺丝)}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output/05.png}
+        \caption{05.png 分割结果\\(发生严重粘连)}
+    \end{subfigure}
+    \caption{传统图像处理方法的分割结果展示}
+    \label{fig:traditional_results}
+\end{figure}
+
+\subsection{结果分析}
+整体而言，作为我的第一种初步尝试，基于 Otsu 自适应阈值法和形态学的传统算法在处理背景单一、散落分布的螺丝时表现出了较好的效果，其执行效率高且对滤除螺母等孔洞类干扰物有极强的作用。
+
+特别地，在测试图 \texttt{04.png} 中，由于该图背景曝光更白、整体对比度极高且几乎没有阴影，算法取得了非常出色的分割效果，所有螺丝都被清晰、完整且准确地分割开来。
+
+\subsection{存在的问题与局限性分析}
+尽管初步尝试取得了一定成果，但由于传统方法的本质局限，在大部分图片中依然暴露出了明显的缺陷：
+
+\begin{enumerate}
+    \item \textbf{阴影被误认为前景}：
+    \begin{itemize}
+        \item \textbf{现象}：在 \texttt{01.png}、\texttt{02.png} 和 \texttt{03.png} 中，螺丝周围存在明显的投射阴影。由于阴影区域的灰度值也较低，Otsu 阈值分割会将这些阴影区域与螺丝本体一并划入前景掩码中，导致最终生成的分割 Mask 比螺丝实际的物理轮廓要大出一圈。
+        \item \textbf{原因}：传统二值化算法仅依赖像素的绝对灰度值，无法区分“黑色金属”和“深色阴影”的语义区别。这也是为什么 \texttt{04.png} 效果好，因为它几乎没有阴影干扰。
+    \end{itemize}
+    \item \textbf{严重粘连与靠近的螺丝被合并}：
+    \begin{itemize}
+        \item \textbf{现象}：在测试图 \texttt{05.png} 中，大量螺丝高度重叠堆积在一起，算法将其识别为了一个巨大的单一连通分量，导致严重漏分。同样地，在其他图片中，只要两个螺丝靠得比较近，甚至只是阴影相互接触，它们就会被连通域算法合并，分配成同一个颜色，识别为一个实例。
+        \item \textbf{原因}：传统连通域分析算法不具备空间语义理解和实例区分能力，只要前景像素（包括阴影）连通，就会归为同一实例。距离变换与分水岭算法虽然能在某些圆形颗粒场景中拆分重叠物体，但在细长且不规则的螺丝场景下容易导致过分割，因此效果也不理想。
+    \end{itemize}
+\end{enumerate}
+
+综上所述，传统的基于二值化与形态学的图像处理方法在处理无阴影、无遮挡的高对比度图片（如图 04）时效果极佳。但它无法解决阴影误分割以及重叠粘连螺丝的实例拆分问题。因此，我将这部分作为基线尝试，后续我将采用其他方法来解决阴影和粘连的问题，以期获得更精确的实例分割效果。
+
+\section{方法二：引入视觉模型 SAM }
+为了克服传统方法在阴影和粘连场景下的本质局限性，我引入了 Meta 提出的视觉基础大模型 SAM（Segment Anything Model）进行零样本实例分割，作为我的第二种方法。
+
+\subsection{初步运行现象与问题}
+在使用 SAM 的全自动掩码生成模式对测试图 \texttt{01.png} 进行初步处理后，我得到了如图 \ref{fig:sam_ori} 所示的分割结果。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../figs/sam_ori_01.png}
+    \caption{SAM 全自动掩码生成的初步分割结果}
+    \label{fig:sam_ori}
+\end{figure}
+
+从初步运行的结果图中可以明显观察到以下缺陷：
+\begin{enumerate}
+    \item \textbf{过度分割严重}：整张图被划分出了过多的细碎掩码。几乎所有的螺丝都被切碎了，例如螺丝头（六角帽部分）和螺丝身（螺纹部分）被 SAM 生硬地分成了两个完全独立的实例掩码。
+    \item \textbf{背景干扰物被当作目标分割}：由于测试图像背景中存在彩色的“田字格”区域，SAM 同样将这些色块及其边缘的轮廓线作为一个个独立的物体完整地分割了出来。
+\end{enumerate}
+
+\subsection{原因分析}
+导致上述现象的根本原因在于，SAM 是一个“分割一切”的类别无关大模型，在全自动模式下它缺乏特定于当前任务，即“只要完整螺丝”的语义先验引导：
+\begin{itemize}
+    \item \textbf{多粒度特性}：SAM 的设计初衷是响应任意层级和粒度的分割，如整体 Object、局部 Part、甚至是更细小的 Subpart。在缺乏明确边界框或点提示的全自动撒点模式下，SAM 倾向于输出它能检测到的所有显著边缘。由于螺丝头与螺丝身在几何形状、表面纹理、颜色、甚至反光特性上差异很大，SAM 认为它们在局部细节上属于不同的部件，因而输出了细粒度的“过分割”结果。
+    \item \textbf{无特定类别偏好}：SAM 没有经过“只分割工业螺丝”的特定微调，它无法分辨我们只需要“螺丝”而不需要背景“田字格”。对于 SAM 的视觉编码器而言，背景中的田字格色块具有非常清晰且高对比度的颜色边界，是非常符合“物体”定义的目标，因此也被不可避免地一并提取出来。
+\end{itemize}
+
+\subsection{下一步改进策略：结合目标检测引入语义先验：DINO}
+针对 SAM 全自动模式下的部件级过分割与背景干扰问题，我的第三种方法计划采用“\textbf{Prompt-based SAM}”与“\textbf{语义目标检测}”相结合的策略来进行改进。
+
+\section{方法三：SAM + Grounding DINO }
+具体而言，我引入了 Grounding DINO 这一强大的开集目标检测模型，它能通过自然语言文本提示定位图像中的目标。整个联合算法的工作流如下：
+\begin{enumerate}
+    \item \textbf{语言驱动的边界框生成}：向 Grounding DINO 输入文本提示 \texttt{"screw . bolt"}。模型会在图像中检测所有符合“螺丝”语义的目标，并输出其对应的边界框。这能在物理层面上完美过滤掉背景中的“田字格”和不需要的“螺母”。
+    \item \textbf{框提示引导的实例分割}：将提取到的 Bounding Box 列表作为框提示输入给 SAM。此时 SAM 得到了明确的空间和对象层级引导：分割框内的整个物体，从而输出 Object-level 的完整掩码，彻底解决螺丝头和身子被强行切碎的过分割问题。
+\end{enumerate}
+
+\subsection{Grounded-SAM 的实验结果与深度分析}
+使用 Grounding DINO + SAM 联合处理后，我们观察了 \texttt{01.png}、\texttt{02.png} 和 \texttt{04.png} 的结果。
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_ori_01.png}
+        \caption{01.png：效果较好}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_ori_02.png}
+        \caption{02.png：漏检严重}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_ori_04.png}
+        \caption{04.png：表现完美}
+    \end{subfigure}
+    \caption{Grounded-SAM 分割结果对比}
+\end{figure}
+
+虽然这种方法解决了背景干扰和螺丝自身碎裂的问题，掩码极其贴合金属边缘，几乎不受阴影干扰，但在不同的图片中，模型的召回率表现出了巨大的差异：
+
+\begin{itemize}
+    \item \textbf{\texttt{01.png}与 \texttt{04.png}}：在这两张图中，Grounding DINO 成功找出了绝大部分螺丝，随后 SAM 生成了极其精准的掩码，不仅成功避开了螺母，而且螺丝边缘没有被阴影“撑大”，效果远超传统图像处理。特别是 \texttt{04.png}，因为背景更白、对比度高，目标特征更加显著，DINO 成功检测到了所有螺丝。
+    \item \textbf{\texttt{02.png}}：在 \texttt{02.png} 中，我们发现大量螺丝没有被识别出来，导致了严重的漏分。
+\end{itemize}
+
+出现 \texttt{02.png} 大量漏检现象的核心原因在于 Grounding DINO 的置信度阈值设置不当，以及测试图像间的分布差异：
+\begin{enumerate}
+    \item \textbf{置信度阈值过高}：在当前的脚本中，我对 Grounding DINO 设置的 \texttt{box\_threshold} 和 \texttt{text\_threshold} 可能偏高。虽然高阈值能保证检测出来的绝对是螺丝，但对于一些特征不够明显的螺丝，例如因为反光、角度倾斜、阴影遮盖或尺寸较小，，模型的预测置信度可能恰好低于设定的阈值，从而被直接丢弃，导致漏检。
+    \item \textbf{图像本身的分布差异}：对比原图可以发现，\texttt{04.png} 像假图，背景纯白，螺丝表面纹理和边缘清晰；而 \texttt{02.png} 中的部分螺丝反光强烈或处于暗部。这些因素都会降低语言-视觉多模态模型的响应置信度。
+\end{enumerate}
+
+\subsection{Grounded-SAM 的调参探索与优化策略}
+在使用 Grounded-SAM 解决纯 SAM 的全自动过分割问题后，算法依然存在检测不稳定的现象。为了彻底解决召回率和精确率的平衡问题，我针对模型的核心参数与后处理机制进行了深入的调参探索。
+
+在 Grounding DINO 中，主要有两个阈值控制着模型的检测结果：
+\begin{itemize}
+    \item \textbf{\texttt{box\_threshold}（边界框置信度阈值）}：控制模型对“这是否是一个物体”的判定严格程度。
+    \item \textbf{\texttt{text\_threshold}（文本相似度阈值）}：控制模型对“这个物体与提示词 \texttt{screw} 是否高度吻合”的判定严格程度。
+\end{itemize}
+
+以下是调参过程中的几种典型现象及应对策略：
+
+\begin{enumerate}
+    \item \textbf{高阈值导致的漏检现象}：
+    \begin{itemize}
+        \item \textbf{测试参数}：\texttt{box\_threshold = 0.2}, \texttt{text\_threshold = 0.2}。
+        \item \textbf{实验现象}：如图 \ref{fig:param_tune}(a) 所示，在 \texttt{02.png} 中出现了严重的漏检。由于部分螺丝表面反光强烈、处于暗部或者带有垫片，它们在多模态特征空间中的置信度得分较低。因为阈值设定较高，这些螺丝被模型判定为“不合格”而被直接丢弃。
+    \end{itemize}
+    
+    \item \textbf{低阈值导致的单物体重复预测与误检}：
+    \begin{itemize}
+        \item \textbf{测试参数}：\texttt{box\_threshold = 0.15}, \texttt{text\_threshold = 0.2}。
+        \item \textbf{实验现象}：如图 \ref{fig:param_tune}(b) 所示，为了解决漏检问题，我大幅降低了 \texttt{box\_threshold} 以提高召回率。漏检的螺丝确实被找出来了，但随之带来了两个严重的副作用：
+        一是误检增加，背景的田字格和螺母被错认为了螺丝；
+        二是同一物体产生多个掩码，因为门槛变低，Grounding DINO 对同一个螺丝同时输出了“包含整体的大框”、“仅包含螺丝头的小框”以及“仅包含螺丝身的小框”。这些重叠的框传给 SAM 后，SAM 输出了多层重叠叠加的掩码，导致螺丝表面出现了诡异的碎裂拼接纹理。
+    \end{itemize}
+\end{enumerate}
+
+\subsection{引入 NMS（非极大值抑制）与接续调参}
+
+为了消除低阈值带来的多框重叠现象，我在代码中引入了 NMS（Non-Maximum Suppression）。设定 \texttt{iou\_threshold}，当两个框重叠面积超过该阈值时，仅保留置信度得分最高的那一个框。
+
+在加入 NMS 后，重叠碎裂的纹理得到了彻底消除。然而，参数的调节依然是一场博弈。例如，当我采用测试参数 A（\texttt{box\_threshold = 0.15}, \texttt{text\_threshold = 0.25}, \texttt{iou\_threshold = 0.3}）时，如图 \ref{fig:param_tune}(c) 所示，虽然碎片化消失了，但由于 \texttt{text\_threshold} 依然偏高，导致对带有垫片等形状特异的螺丝置信度不足，依然发生了一定程度的漏检。
+
+随后，我换用了测试参数 B（\texttt{box\_threshold = 0.17}, \texttt{text\_threshold = 0.27}, \texttt{iou\_threshold = 0.2}），并在提示词中加入了更多紧固件同义词。如图 \ref{fig:param_tune}(d) 所示，在微调阈值后召回率得到了极大提升，此时模型找出了所有螺丝且掩码顺滑完整，但不可避免地依然在左上角的背景区域将田字格和无关的划线痕迹当成了螺丝（精确率不足）。
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_0.2_0.2.png}
+        \caption{高阈值漏检\\(0.2, 0.2)}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_0.15_0.2.png}
+        \caption{低阈值致碎片化\\(0.15, 0.2)}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_0.17_0.27_0.2.png}
+        \caption{加 NMS 后漏检\\(0.17, 0.27, 0.2)}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\textwidth]{../figs/grounded_sam_0.15_0.25_0.3.png}
+        \caption{加 NMS 后误检\\(0.15, 0.25, 0.3)}
+    \end{subfigure}
+    \caption{Grounded-SAM 在不同参数及策略下的调优过程（以 \texttt{02.png} 为例）}
+    \label{fig:param_tune}
+\end{figure}
+
+在经过漫长的调参之后，我最终确定了参数 \texttt{box\_threshold = 0.1}, \texttt{text\_threshold = 0.15}, \texttt{iou\_threshold = 0.3}。在该参数下，模型的召回率最高，同时误检率也最低。我相信肯定有一组参数可以完美地分割出所有螺丝，但是我没有找到。
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/调参.png}
+        \caption{调参过程记录}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output_grounded_sam/0.1_0.15_0.3/01.png}
+        \caption{01.png}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output_grounded_sam/0.1_0.15_0.3/02.png}
+        \caption{02.png}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output_grounded_sam/0.1_0.15_0.3/03.png}
+        \caption{03.png}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output_grounded_sam/0.1_0.15_0.3/04.png}
+        \caption{04.png}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../output_grounded_sam/0.1_0.15_0.3/05.png}
+        \caption{05.png}
+    \end{subfigure}
+    \caption{Grounded-SAM 最终参数分割结果与调参记录}
+    \label{fig:final_results}
+\end{figure}
+
+\section{方法四：使用现有网站}
+行文至此，我想到了在hw2中曾经使用过的网站：\textbf{https://trexlabel.com/}。里面提供了非常强大的AI预标注，方向涵盖分割标框等常用任务。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{../figs/ai_ui.png}
+    \caption{Trexlabel 网站}
+    \label{fig:trexlabel}
+\end{figure}
+
+每张图的分割效果都非常好，如果有将螺母也一同分进来的情况，把置信度稍稍调高即可。
+
+下图为网站的分割结果：
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{../figs/ai_01.png}
+        \caption{01.png}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{../figs/ai_02.png}
+        \caption{02.png}
+    \end{subfigure}
+    
+    \vspace{0.2cm} % 添加垂直间距
+    
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/ai_03.png}
+        \caption{03.png}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/ai_04.png}
+        \caption{04.png}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figs/ai_05.png}
+        \caption{05.png}
+    \end{subfigure}
+    \caption{Trexlabel 网站的预标注分割结果}
+    \label{fig:ai_results}
+\end{figure}
+
+我向网站的飞书发送了问卷，询问他们具体是怎么做到分割效果这么好，我有没有可能本地部署。但是截至作业提交时，网站没有回复。
+
+\section{总结}
+本次作业围绕“螺丝实例分割”这一核心任务，我从传统图像处理方法出发，逐步深入到零样本视觉大模型，再到多模态大模型的提示词引导，最后对比了成熟的商业级预标注工具。在这个由浅入深的过程中，我深刻体会到了不同技术路线的优势与局限：
+
+\begin{enumerate}
+    \item \textbf{传统图像处理（Otsu 阈值与形态学）}：
+    这是最为轻量、高效的方法，对硬件几乎没有要求。在背景干净、光照均匀、物体不重叠（如 \texttt{04.png}）的理想场景下，能够精准地完成分割，甚至可以通过简单的几何特征（如实心率）非常漂亮地过滤掉螺母。但它的鲁棒性极差，面对阴影干扰、物体粘连（如 \texttt{05.png}）等复杂场景时，极易发生误分割和欠分割。
+
+    \item \textbf{纯 SAM（Segment Anything Model）大模型}：
+    作为零样本分割模型，SAM 展现了惊人的边缘吸附和细节提取能力。但由于缺乏特定任务的语义理解，“自动掩码生成”模式导致了严重的过度分割（Over-segmentation）。它会将螺帽、螺身、甚至背景田字格当成独立的实例，这说明“万能”的底座模型必须结合强有力的“引导”才能解决特定领域的问题。
+
+    \item \textbf{Grounded-SAM（多模态提示词引导 + NMS）}：
+    为了给 SAM 提供精准的语义引导，我引入了 Grounding DINO，通过文本提示词（\texttt{"screw . bolt"}）先生成边界框，再将其作为 Prompt 传给 SAM。这种“检测+分割”的流水线极大地改善了过度分割问题。在实践中，我遇到了低阈值带来的多框重叠和碎片化问题，最终通过引入非极大值抑制（NMS）以及大量的参数微调（\texttt{box\_threshold}, \texttt{text\_threshold}, \texttt{iou\_threshold}），在召回率与精确率之间找到了一个较好的平衡点，证明了提示词工程和后处理在应用大模型时的重要性。
+
+    \item \textbf{商业预标注平台（Trexlabel）}：
+    作为对照组，成熟的商业平台展现出了目前工业界顶尖的实例分割水准，不仅掩码精准，对阴影和遮挡的鲁棒性也极强。这反映出现阶段除了依赖基础大模型外，高质量的垂直领域数据微调、更复杂的多模型融合流水线以及极致的工程优化，仍然是不可替代的壁垒。
+\end{enumerate}
+
+总体而言，本次作业不仅是一次代码实现的练习，更是一次从“工程实现”到“模型调优”再到“效果分析”的完整科研体验。从处理粘连到对抗阴影，再到模型参数的“阈值博弈”，我对计算机视觉在真实场景下的落地挑战有了更加直观和深刻的认识。
+
+\end{document}
