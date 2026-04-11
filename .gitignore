@@ -5,6 +5,3 @@
 
 # Ignore large video experiment files
 bhw/vedio_exp/
-
-# Ignore dataset files
-bhw/dataset/
