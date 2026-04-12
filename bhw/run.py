@@ -33,17 +33,29 @@ def process_video(video_path, model, mask_output_dir):
             
         # Run YOLOv8 tracking with ByteTrack
         # persist=True tells the tracker that the frames are sequential
-        results = model.track(frame, persist=True, tracker="bytetrack.yaml", verbose=False)
+        # conf=0.5 过滤掉低置信度的背景噪点（避免传送带划痕被识别为螺丝）
+        results = model.track(frame, persist=True, tracker="custom_tracker.yaml", conf=0.5, verbose=False)
         
         if results[0].boxes is not None and results[0].boxes.id is not None:
             boxes = results[0].boxes
             track_ids = boxes.id.int().cpu().tolist()
             class_ids = boxes.cls.int().cpu().tolist()
             
-            for track_id, class_id in zip(track_ids, class_ids):
+            for track_id, class_id, box in zip(track_ids, class_ids, boxes.xyxy):
                 # We only care about the 5 screw types (classes 0-4)
                 if class_id in unique_ids:
-                    unique_ids[class_id].add(track_id)
+                    # 第三步绝招：边缘鬼影过滤
+                    # 只统计中心点在画面安全区内的螺丝，避免边缘截断导致的 ID Switch
+                    x1, y1, x2, y2 = box.tolist()
+                    center_x = (x1 + x2) / 2
+                    center_y = (y1 + y2) / 2
+                    img_width = frame.shape[1]
+                    img_height = frame.shape[0]
+                    
+                    # 设定边缘 50 像素为“危险区”，不进行计数登记
+                    MARGIN = 50
+                    if (MARGIN < center_x < img_width - MARGIN) and (MARGIN < center_y < img_height - MARGIN):
+                        unique_ids[class_id].add(track_id)
         
         # Save mask for the middle frame
         if frame_idx == mid_frame_idx:
