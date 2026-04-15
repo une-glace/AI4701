@@ -1,0 +1,6 @@
+path: dataset
+train: train
+val: valid
+test: test
+
+names: ['__background__', 'Screw1', 'Screw2', 'Screw3', 'Screw4', 'Screw5', 'Others']
