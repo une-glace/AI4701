@@ -1,9 +1,0 @@
-# YOLOv8-seg configuration for screw dataset
-# MUST use absolute path because of Ultralytics 'datasets_dir' settings override
-path: E:\sync\courses\AI4701\hw\bhw\dataset_yolo
-train: train/images
-val: val/images
-
-# Classes
-nc: 6
-names: ['Screw_1', 'Screw_2', 'Screw_3', 'Screw_4', 'Screw_5', 'Others']
