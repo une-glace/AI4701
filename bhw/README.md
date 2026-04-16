@@ -3,10 +3,10 @@
 本项目当前采用 **YOLO 实例分割 + ByteTrack 跟踪 + 时序去重计数** 的方案。
 
 当前仓库中：
-- `video_track_count.py` 是单视频推理与计数主脚本。
-- `run.py` 是按作业要求封装好的**一键运行入口**。
-- `extract_frames.py` 用于视频抽帧与数据集准备。
-- `train.py` 用于 YOLO 模型训练。
+- `core/video_tracker.py` 是单视频推理与计数的核心逻辑模块。
+- `run.py` 是按作业要求封装好的**一键运行入口**，通过导入 `core.video_tracker` 实现批量执行。
+- `tools/extract_frames.py` 用于视频抽帧与数据集准备。
+- `tools/train.py` 用于 YOLO 模型训练。
 
 ## 0. 获取 Ultralytics 源码
 
@@ -23,11 +23,15 @@ git clone https://github.com/ultralytics/ultralytics.git ultralytics_main
 ```text
 bhw/
   run.py                    # 助教一键运行入口
-  video_track_count.py      # 单视频检测、跟踪、计数主逻辑
-  extract_frames.py         # 视频按间隔抽帧脚本
-  train.py                  # YOLO 训练脚本
   README.md
   HOMEWORK_VIDEO_SCREW_COUNTING.md
+  core/
+    video_tracker.py        # 单视频检测、跟踪、计数核心逻辑
+  tools/
+    extract_frames.py       # 视频按间隔抽帧脚本
+    train.py                # YOLO 训练脚本
+  configs/
+    screw.yaml              # 数据集配置文件
   ultralytics_main/         # 克隆下来的 Ultralytics 源码 (需要手动获取)
   weights/
     best.pt                 # 训练好的模型权重
@@ -66,7 +70,7 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 `run.py` 会完成以下步骤：
 
 1. 遍历 `--data_dir` 下的所有视频文件。
-2. 对每个视频调用 `video_track_count.py` 完成逐帧检测、跟踪和去重计数。
+2. 对每个视频调用 `core.video_tracker.process_video` 完成逐帧检测、跟踪和去重计数（进程内调用，无额外开销）。
 3. 从该视频保存的可视化帧中选取最接近中间位置的一张，复制为 `{video_name}_mask.png`。
 4. 读取 `summary.txt` 中的分类计数结果。
 5. 汇总所有视频结果并保存为 `result.npy`。
@@ -93,7 +97,7 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 如果需要单独测试某一个视频，可以直接运行：
 
 ```bash
-python video_track_count.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt 
+python core/video_tracker.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt 
 ```
 
 常用参数：
@@ -104,7 +108,7 @@ python video_track_count.py --source ./test_videos/IMG_2376.MOV --weights ./weig
 ## 7. 当前实现说明
 
 - 当前仓库主要包含**推理与计数**流程，以及我们新增加的**数据处理（抽帧）和训练脚本**。
-- `video_track_count.py` 是核心计数逻辑。
+- `core/video_tracker.py` 是核心计数逻辑。
 - `run.py` 是为了满足作业要求而增加的批量封装入口。
-- `extract_frames.py` 和 `train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
+- `tools/extract_frames.py` 和 `tools/train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
 - 请务必先通过 `git clone https://github.com/ultralytics/ultralytics.git ultralytics_main` 获取核心依赖源码后再执行环境配置。

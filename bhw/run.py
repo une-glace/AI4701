@@ -1,7 +1,6 @@
 import argparse
 import os
 import shutil
-import subprocess
 import sys
 import time
 from pathlib import Path
@@ -20,16 +19,19 @@ if LOCAL_ULTRALYTICS.exists():
 
 from ultralytics import YOLO  # noqa: E402
 
+# 引入重构后的模块
+from core.video_tracker import process_video, parse_args as tracker_parse_args
+
 
 VIDEO_EXTENSIONS = {".mp4", ".avi", ".mov", ".mkv", ".MOV", ".MP4", ".AVI", ".MKV"}
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run screw counting on a folder of videos.")
-    parser.add_argument("--data_dir", type=str, required=True, help="Folder containing input videos.")
-    parser.add_argument("--output_path", type=str, required=True, help="Path to save result.npy.")
-    parser.add_argument("--output_time_path", type=str, required=True, help="Path to save time.txt.")
-    parser.add_argument("--mask_output_path", type=str, required=True, help="Folder to save mask overlays.")
+    parser.add_argument("--data_dir", type=str, default=str(ROOT / "test_videos"), help="Folder containing input videos.")
+    parser.add_argument("--output_path", type=str, default=str(ROOT / "result.npy"), help="Path to save result.npy.")
+    parser.add_argument("--output_time_path", type=str, default=str(ROOT / "time.txt"), help="Path to save time.txt.")
+    parser.add_argument("--mask_output_path", type=str, default=str(ROOT / "mask_folder"), help="Folder to save mask overlays.")
     parser.add_argument("--weights", type=str, default=str(ROOT / "weights" / "best.pt"), help="YOLO weights path.")
     parser.add_argument("--tracker", type=str, default="bytetrack.yaml", help="Tracker config name/path.")
     parser.add_argument("--conf", type=float, default=0.15, help="Confidence threshold.")
@@ -125,41 +127,23 @@ def run_single_video(video_path: Path, args, device: str, target_class_names: li
     total_frames = get_frame_count(video_path)
     save_every = max(1, total_frames // 2) if total_frames > 1 else 1
 
-    command = [
-        sys.executable,
-        str(ROOT / "video_track_count.py"),
-        "--source",
-        str(video_path),
-        "--weights",
-        str(Path(args.weights)),
-        "--tracker",
-        str(args.tracker),
-        "--conf",
-        str(args.conf),
-        "--iou",
-        str(args.iou),
-        "--imgsz",
-        str(args.imgsz),
-        "--device",
-        device,
-        "--save-every",
-        str(save_every),
-        "--project",
-        str(args.project),
-    ]
+    # 构造传递给核心追踪器的参数对象
+    tracker_args = tracker_parse_args(args_list=[
+        "--source", str(video_path),
+        "--weights", str(Path(args.weights)),
+        "--tracker", str(args.tracker),
+        "--conf", str(args.conf),
+        "--iou", str(args.iou),
+        "--imgsz", str(args.imgsz),
+        "--device", device,
+        "--save-every", str(save_every),
+        "--project", str(args.project)
+    ])
 
-    env = os.environ.copy()
-    env["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    # 直接调用核心处理函数，不再使用 subprocess
+    count_by_class, vis_dir = process_video(tracker_args)
 
-    subprocess.run(command, cwd=str(ROOT), check=True, env=env)
-
-    project_dir = Path(args.project) / video_path.stem
-    summary_path = project_dir / "summary.txt"
-    vis_dir = project_dir / "vis"
-
-    raw_counts = parse_summary_counts(summary_path)
-    counts = [raw_counts.get(class_name, 0) for class_name in target_class_names]
+    counts = [count_by_class.get(class_name, 0) for class_name in target_class_names]
 
     chosen_vis = choose_middle_visualization(vis_dir, total_frames)
     if chosen_vis is None:
