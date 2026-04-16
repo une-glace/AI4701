@@ -116,8 +116,9 @@ def get_target_class_names(weights_path: Path) -> list[str]:
     model = YOLO(str(weights_path))
     names = model.names
     if isinstance(names, dict):
-        return [str(names[idx]) for idx in range(5) if idx in names]
-    return [str(names[idx]) for idx in range(min(5, len(names)))]
+        # The background class is 0, so we extract classes 1 to 5 (Screw1 to Screw5)
+        return [str(names[idx]) for idx in range(1, 6) if idx in names]
+    return [str(names[idx]) for idx in range(1, min(6, len(names)))]
 
 
 def run_single_video(video_path: Path, args, device: str, target_class_names: list[str]) -> tuple[list[int], Path]:

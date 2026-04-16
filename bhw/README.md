@@ -5,7 +5,16 @@
 当前仓库中：
 - `video_track_count.py` 是单视频推理与计数主脚本。
 - `run.py` 是按作业要求封装好的**一键运行入口**。
-- `ultralytics_main/` 是随项目一起提交的本地 Ultralytics 源码目录，不依赖单独去 GitHub 再下载。
+- `extract_frames.py` 用于视频抽帧与数据集准备。
+- `train.py` 用于 YOLO 模型训练。
+
+## 0. 获取 Ultralytics 源码
+
+本项目依赖 Ultralytics 库。请在运行项目前，从 GitHub 克隆仓库并重命名为 `ultralytics_main`：
+
+```bash
+git clone https://github.com/ultralytics/ultralytics.git ultralytics_main
+```
 
 ## 1. 项目结构
 
@@ -15,9 +24,11 @@
 bhw/
   run.py                    # 助教一键运行入口
   video_track_count.py      # 单视频检测、跟踪、计数主逻辑
+  extract_frames.py         # 视频按间隔抽帧脚本
+  train.py                  # YOLO 训练脚本
   README.md
   HOMEWORK_VIDEO_SCREW_COUNTING.md
-  ultralytics_main/         # 本地 Ultralytics 源码
+  ultralytics_main/         # 克隆下来的 Ultralytics 源码 (需要手动获取)
   weights/
     best.pt                 # 训练好的模型权重
 ```
@@ -82,18 +93,18 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 如果需要单独测试某一个视频，可以直接运行：
 
 ```bash
-python video_track_count.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt --device cpu
+python video_track_count.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt 
 ```
 
 常用参数：
-- `--device cpu`：没有 CUDA 时使用 CPU
 - `--save-every 10`：每隔多少帧保存一张可视化图
 - `--tracker bytetrack.yaml`：使用 ByteTrack 跟踪配置
 - `--imgsz 1024`：推理分辨率
 
 ## 7. 当前实现说明
 
-- 当前仓库重点是**推理与计数**，不是训练代码仓库。
+- 当前仓库主要包含**推理与计数**流程，以及我们新增加的**数据处理（抽帧）和训练脚本**。
 - `video_track_count.py` 是核心计数逻辑。
 - `run.py` 是为了满足作业要求而增加的批量封装入口。
-- `ultralytics_main/` 当前已经按普通文件夹随项目管理，不作为嵌套仓库单独提交。
+- `extract_frames.py` 和 `train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
+- 请务必先通过 `git clone https://github.com/ultralytics/ultralytics.git ultralytics_main` 获取核心依赖源码后再执行环境配置。
