@@ -1,3 +1,5 @@
+torch>=2.0.0
+torchvision>=0.15.0
 -e ./ultralytics_main
 tqdm>=4.66.0
 lapx>=0.5.12

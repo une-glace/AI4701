@@ -8,13 +8,9 @@
 - `tools/extract_frames.py` 用于视频抽帧与数据集准备。
 - `tools/train.py` 用于 YOLO 模型训练。
 
-## 0. 获取 Ultralytics 源码
+## 0. 依赖说明
 
-本项目依赖 Ultralytics 库。请在运行项目前，从 GitHub 克隆仓库并重命名为 `ultralytics_main`：
-
-```bash
-git clone https://github.com/ultralytics/ultralytics.git 
-```
+**助教老师请注意**：本项目运行依赖于 Ultralytics 库，为了方便评阅，**我们已经将 `ultralytics` 的核心源码打包在作业 zip 文件中的 `ultralytics_main` 目录下，您无需再从 GitHub 额外 clone 或重命名任何仓库**。直接配置环境即可。
 
 ## 1. 项目结构
 
@@ -48,8 +44,8 @@ pip install -r requirements.txt
 ```
 
 说明：
-- `requirements.txt` 中已经包含 `-e ./ultralytics_main`，安装时会自动以可编辑模式使用仓库里的本地 Ultralytics 源码。
-- 如果没有可用 GPU，可以在运行时显式加 `--device cpu`。
+- `requirements.txt` 中已包含 `torch>=2.0.0` 依赖项（支持 GPU 硬件加速），以及 `-e ./ultralytics_main`。
+- 如果没有可用 GPU，可以在运行命令时显式加上 `--device cpu`。
 
 ## 3. 作业要求的一键运行
 
@@ -110,4 +106,3 @@ python core/video_tracker.py --source ./test_videos/IMG_2376.MOV --weights ./wei
 - `core/video_tracker.py` 是核心计数逻辑。
 - `run.py` 是为了满足作业要求而增加的批量封装入口。
 - `tools/extract_frames.py` 和 `tools/train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
-- 请务必先通过 `git clone https://github.com/ultralytics/ultralytics.git` 获取核心依赖源码后再执行环境配置。
