@@ -13,7 +13,7 @@
 本项目依赖 Ultralytics 库。请在运行项目前，从 GitHub 克隆仓库并重命名为 `ultralytics_main`：
 
 ```bash
-git clone https://github.com/ultralytics/ultralytics.git ultralytics_main
+git clone https://github.com/ultralytics/ultralytics.git 
 ```
 
 ## 1. 项目结构
@@ -22,19 +22,19 @@ git clone https://github.com/ultralytics/ultralytics.git ultralytics_main
 
 ```text
 bhw/
-  run.py                    # 助教一键运行入口
-  README.md
-  HOMEWORK_VIDEO_SCREW_COUNTING.md
-  core/
-    video_tracker.py        # 单视频检测、跟踪、计数核心逻辑
-  tools/
-    extract_frames.py       # 视频按间隔抽帧脚本
-    train.py                # YOLO 训练脚本
-  configs/
-    screw.yaml              # 数据集配置文件
-  ultralytics_main/         # 克隆下来的 Ultralytics 源码 (需要手动获取)
-  weights/
-    best.pt                 # 训练好的模型权重
+├── run.py                    # 助教一键运行入口
+├── README.md
+├── HOMEWORK_VIDEO_SCREW_COUNTING.md
+├── core/
+│   └── video_tracker.py      # 单视频检测、跟踪、计数核心逻辑
+├── tools/
+│   ├── extract_frames.py     # 视频按间隔抽帧脚本
+│   └── train.py              # YOLO 训练脚本
+├── configs/
+│   └── screw.yaml            # 数据集配置文件
+├── ultralytics_main/         # 克隆下来的 Ultralytics 源码 (需要手动获取)
+└── weights/
+    └── best.pt               # 训练好的模型权重
 ```
 
 ## 2. 环境配置
@@ -62,7 +62,7 @@ python run.py --data_dir /path/to/test_videos_folder --output_path ./result.npy 
 如果你的权重不在默认位置，也可以额外指定：
 
 ```bash
-python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_path ./time.txt --mask_output_path ./mask_folder --weights ./weights/best.pt
+python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_path ./time.txt --mask_output_path ./mask_folder --weights /path/to/best.pt
 ```
 
 ## 4. `run.py` 的工作流程
@@ -70,7 +70,7 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 `run.py` 会完成以下步骤：
 
 1. 遍历 `--data_dir` 下的所有视频文件。
-2. 对每个视频调用 `core.video_tracker.process_video` 完成逐帧检测、跟踪和去重计数（进程内调用，无额外开销）。
+2. 对每个视频调用 `core.video_tracker.process_video` 完成逐帧检测、跟踪和去重计数。
 3. 从该视频保存的可视化帧中选取最接近中间位置的一张，复制为 `{video_name}_mask.png`。
 4. 读取 `summary.txt` 中的分类计数结果。
 5. 汇总所有视频结果并保存为 `result.npy`。
@@ -81,7 +81,6 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 按作业要求，`run.py` 输出以下内容：
 
 - `result.npy`
-  - 通过 `numpy.load(..., allow_pickle=True).item()` 读取后是一个 `dict`
   - 键为视频名（不带后缀）
   - 值为长度为 5 的列表，对应 5 类螺丝计数
 
@@ -111,4 +110,4 @@ python core/video_tracker.py --source ./test_videos/IMG_2376.MOV --weights ./wei
 - `core/video_tracker.py` 是核心计数逻辑。
 - `run.py` 是为了满足作业要求而增加的批量封装入口。
 - `tools/extract_frames.py` 和 `tools/train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
-- 请务必先通过 `git clone https://github.com/ultralytics/ultralytics.git ultralytics_main` 获取核心依赖源码后再执行环境配置。
+- 请务必先通过 `git clone https://github.com/ultralytics/ultralytics.git` 获取核心依赖源码后再执行环境配置。
