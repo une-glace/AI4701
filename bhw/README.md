@@ -1,16 +1,16 @@
 # AI4701 Lab4: 视频螺丝计数分析
 
-本项目当前采用 **YOLO 实例分割 + ByteTrack 跟踪 + 时序去重计数** 的方案。
+本项目开发了一个工业视觉场景下的**多类别零件动态计数系统**，通过深度学习检测+多目标跟踪的融合方案实现视频实时螺丝自动分类与精准计数。系统采用**YOLO 实例分割**进行逐帧检测，**ByteTrack** 维持跨帧轨迹连续性，配合**光流运动估计**与**时序去重算法**消除重复计数，最终生成结构化计数结果和可视化输出。
 
-当前仓库中：
+<!-- 当前仓库中：
 - `core/video_tracker.py` 是单视频推理与计数的核心逻辑模块。
 - `run.py` 是按作业要求封装好的**一键运行入口**，通过导入 `core.video_tracker` 实现批量执行。
 - `tools/extract_frames.py` 用于视频抽帧与数据集准备。
-- `tools/train.py` 用于 YOLO 模型训练。
+- `tools/train.py` 用于 YOLO 模型训练。 -->
 
 ## 0. 依赖说明
 
-**助教老师请注意**：本项目运行依赖于 Ultralytics 库，为了方便评阅，**我们已经将 `ultralytics` 的核心源码打包在作业 zip 文件中的 `ultralytics_main` 目录下，您无需再从 GitHub 额外 clone 或重命名任何仓库**。直接配置环境即可。
+为便于评阅，仓库已包含 `ultralytics_main` 目录，无需额外从 GitHub clone。所有依赖由 `requirements.txt` 指定。
 
 ## 1. 项目结构
 
@@ -21,14 +21,28 @@ bhw/
 ├── run.py                    # 助教一键运行入口
 ├── README.md
 ├── HOMEWORK_VIDEO_SCREW_COUNTING.md
+├── SLIDES_OUTLINE.md         # 汇报 PPT 大纲说明
+├── 消融实验指南.md             # 消融实验文档
 ├── core/
-│   └── video_tracker.py      # 单视频检测、跟踪、计数核心逻辑
+│   ├── tracker.py                   # 短脚本入口（单视频调试推荐）
+│   ├── video_tracker.py             # 🔴 主编排模块
+│   ├── video_tracker_motion.py      # 🟠 光流与运动估计模块
+│   ├── video_tracker_visualization.py # 🟡 可视化渲染模块
+│   │   ├─ 掩膜叠加（类别色彩编码）
+│   │   ├─ 边界框与追踪 ID 标签
+│   │   └─ 计数面板统计渲染
+│   └── video_tracker_debug.py       # 🟢 日志与汇总模块
+│       ├─ 帧级检测统计
+│       └─ summary.txt 导出
 ├── tools/
 │   ├── extract_frames.py     # 视频按间隔抽帧脚本
 │   └── train.py              # YOLO 训练脚本
 ├── configs/
 │   └── screw.yaml            # 数据集配置文件
-├── ultralytics_main/         # 克隆下来的 Ultralytics 源码 (需要手动获取)
+├── dataset/                  # 训练与验证数据集 (YOLO 格式)
+├── test_videos/              # 用于测试和演示的视频目录
+├── ultralytics_main/         # 随作业一起打包的本地 Ultralytics 源码
+├── mask_folder/              # run.py 自动生成的叠加结果掩码图
 └── weights/
     └── best.pt               # 训练好的模型权重
 ```
@@ -55,7 +69,7 @@ pip install -r requirements.txt
 python run.py --data_dir /path/to/test_videos_folder --output_path ./result.npy --output_time_path ./time.txt --mask_output_path ./mask_folder/
 ```
 
-如果你的权重不在默认位置，也可以额外指定：
+如需指定权重：
 
 ```bash
 python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_path ./time.txt --mask_output_path ./mask_folder --weights /path/to/best.pt
@@ -92,7 +106,7 @@ python run.py --data_dir ./test_videos --output_path ./result.npy --output_time_
 如果需要单独测试某一个视频，可以直接运行：
 
 ```bash
-python core/video_tracker.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt 
+python core/tracker.py --source ./test_videos/IMG_2376.MOV --weights ./weights/best.pt 
 ```
 
 常用参数：
@@ -100,9 +114,15 @@ python core/video_tracker.py --source ./test_videos/IMG_2376.MOV --weights ./wei
 - `--tracker bytetrack.yaml`：使用 ByteTrack 跟踪配置
 - `--imgsz 1024`：推理分辨率
 
-## 7. 当前实现说明
+## 7. 团队分工与工时分配
 
-- 当前仓库主要包含**推理与计数**流程，以及我们新增加的**数据处理（抽帧）和训练脚本**。
-- `core/video_tracker.py` 是核心计数逻辑。
-- `run.py` 是为了满足作业要求而增加的批量封装入口。
-- `tools/extract_frames.py` 和 `tools/train.py` 分别用于自定义数据集生成与 YOLO 模型训练。
+本项目为**团队合作项目**，分工如下：
+
+### 分工方案
+
+| 成员 | 主要职责 | 代码贡献 | 实验贡献 |
+|------|---------|---------|---------|
+| **刘东隅（架构与追踪）** | 系统整体设计、追踪+推理模块代码、第一段视频标注 | video_tracker.py 主体逻辑、参数设计 |
+| **李青雅（数据与可视化）** | 第二、三段视频标注、YOLO 模型训练优化、可视化实现 | video_tracker_visualization.py、YOLO 微调脚本 |
+| **林嘉豪（集成与调优）** | 项目整合、端到端流程测试、参数调优 | run.py、测试框架、集成验证 |
+
