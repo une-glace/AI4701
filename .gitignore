@@ -8,3 +8,6 @@ bhw/vedio_exp/
 bhw/HWF-latex-temp/
 bhw/runs/
 bhw/ultralytics_main/
+
+*.pdf
+*.pptx
